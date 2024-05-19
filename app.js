@@ -4,8 +4,10 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
+var session = require("express-session");
 
 var authRouter = require("./routes/auth");
+require("dotenv").config();
 
 var app = express();
 
@@ -19,7 +21,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
-
+app.use(
+  session({
+    secret: process.env.SECRET,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: false,
+    },
+  }),
+);
 app.use("/user", authRouter);
 
 // catch 404 and forward to error handler
