@@ -11,7 +11,6 @@ let db = new sqlite3.Database(":memory:", (err) => {
     db.exec(
       `CREATE TABLE user (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name text, 
             email text UNIQUE, 
             password text, 
             CONSTRAINT email_unique UNIQUE (email)
@@ -21,11 +20,9 @@ let db = new sqlite3.Database(":memory:", (err) => {
           // Table already created
         } else {
           // Table just created, creating some rows
-          console.log("Inserted Data");
-          var insert =
-            "INSERT INTO user (name, email, password) VALUES (?,?,?)";
-          db.run(insert, ["admin", "admin@example.com", md5("admin123456")]);
-          db.run(insert, ["user", "user@example.com", md5("user123456")]);
+          var insert = "INSERT INTO user (email, password) VALUES (?,?)";
+          db.run(insert, ["admin@example.com", md5("admin123456")]);
+          db.run(insert, ["user@example.com", md5("user123456")]);
         }
       },
     );
